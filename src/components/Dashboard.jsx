@@ -99,7 +99,6 @@ export default function Dashboard({
     fixedTotal,
     investedThisMonth,
     spentThisMonth,
-    remaining,
     recentTransactions,
     phase,
     banks,
@@ -124,8 +123,7 @@ export default function Dashboard({
   const donutData = [
     { name: 'Fixed', value: fixedTotal, color: '#f59e0b' },
     { name: 'Invested', value: investedThisMonth, color: '#6366f1' },
-    { name: 'Spent', value: spentThisMonth, color: '#ef4444' },
-    { name: 'Remaining', value: Math.max(0, remaining), color: '#10b981' }
+    { name: 'Spent', value: spentThisMonth, color: '#ef4444' }
   ]
 
   const recent = recentTransactions.slice(0, 5)
