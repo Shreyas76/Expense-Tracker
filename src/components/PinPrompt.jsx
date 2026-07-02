@@ -4,7 +4,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 export const BALANCE_PIN = '1687'
 
 // Reusable 4-digit PIN modal. Calls onSuccess() when the correct PIN is entered.
-export default function PinPrompt({ open, onClose, onSuccess }) {
+export default function PinPrompt({
+  open,
+  onClose,
+  onSuccess,
+  message = 'to view your bank balances'
+}) {
   const [pin, setPin] = useState('')
   const [error, setError] = useState(false)
 
@@ -48,7 +53,7 @@ export default function PinPrompt({ open, onClose, onSuccess }) {
             exit={{ scale: 0.9, opacity: 0 }}
           >
             <h3 className="text-base font-bold text-white">Enter PIN</h3>
-            <p className="mb-4 text-xs text-muted">to view your bank balances</p>
+            <p className="mb-4 text-xs text-muted">{message}</p>
             <input
               type="password"
               inputMode="numeric"

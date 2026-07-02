@@ -5,12 +5,24 @@ import Ripple from './Ripple'
 import BottomSheet from './BottomSheet'
 import BalanceCenter from './BalanceCenter'
 import CardsSection from './CardsSection'
+import PinPrompt from './PinPrompt'
 import { formatINR, formatCompactINR } from '../utils/formatCurrency'
 import { greetingForNow, monthLabel, todayLabel, formatTimestamp } from '../utils/dateHelpers'
 import { getCategory } from '../constants/categories'
 
-function SummaryCard({ label, value, color, accent, onClick, editable }) {
+function SummaryCard({
+  label,
+  value,
+  color,
+  accent,
+  onClick,
+  editable,
+  masked,
+  revealed,
+  onHide
+}) {
   const Tag = onClick ? 'button' : 'div'
+  const showValue = masked && !revealed
   return (
     <Tag
       onClick={onClick}
@@ -21,11 +33,32 @@ function SummaryCard({ label, value, color, accent, onClick, editable }) {
       <div className="flex items-center gap-2">
         <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: accent }} />
         <span className="text-xs font-medium text-muted">{label}</span>
-        {editable && <span className="ml-auto text-xs text-muted">✏️</span>}
+        {masked && !revealed && (
+          <span className="ml-auto text-[10px] font-semibold text-primary">🔒 Tap</span>
+        )}
+        {editable && revealed !== false && !masked && (
+          <span className="ml-auto text-xs text-muted">✏️</span>
+        )}
+        {masked && revealed && <span className="ml-auto text-xs text-muted">✏️</span>}
       </div>
-      <p className="mt-1.5 text-lg font-bold" style={{ color: color || '#fff' }}>
-        {formatINR(value)}
+      <p
+        className={`mt-1.5 font-bold ${showValue ? 'text-lg tracking-widest text-muted' : 'text-lg'}`}
+        style={{ color: showValue ? undefined : color || '#fff' }}
+      >
+        {showValue ? '₹ ••••' : formatINR(value)}
       </p>
+      {masked && revealed && onHide && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onHide()
+          }}
+          className="mt-1 text-[10px] font-semibold text-muted active:text-white"
+        >
+          Hide
+        </button>
+      )}
     </Tag>
   )
 }
@@ -119,6 +152,8 @@ export default function Dashboard({
 
   const [salaryOpen, setSalaryOpen] = useState(false)
   const [salaryInput, setSalaryInput] = useState(String(salary))
+  const [inHandRevealed, setInHandRevealed] = useState(false)
+  const [askInHandPin, setAskInHandPin] = useState(false)
 
   useEffect(() => {
     if (salaryOpen) setSalaryInput(String(salary))
@@ -127,6 +162,11 @@ export default function Dashboard({
   const saveSalary = () => {
     onSetSalary(Number(salaryInput) || 0)
     setSalaryOpen(false)
+  }
+
+  const onInHandClick = () => {
+    if (!inHandRevealed) setAskInHandPin(true)
+    else setSalaryOpen(true)
   }
 
   const donutData = [
@@ -180,7 +220,10 @@ export default function Dashboard({
           value={salary}
           accent="#8b90a0"
           editable
-          onClick={() => setSalaryOpen(true)}
+          masked
+          revealed={inHandRevealed}
+          onHide={() => setInHandRevealed(false)}
+          onClick={onInHandClick}
         />
         <SummaryCard label="Fixed Expenses" value={fixedTotal} accent="#f59e0b" color="#f59e0b" />
         <SummaryCard label="Invested" value={investedThisMonth} accent="#6366f1" color="#6366f1" />
@@ -221,7 +264,7 @@ export default function Dashboard({
 
       <BottomSheet open={salaryOpen} onClose={() => setSalaryOpen(false)} title="In-hand this month">
         <p className="mb-3 text-sm text-muted">
-          Update how much you received this month. Fixed, spent and remaining adjust automatically —
+          Update how much you received this month. Fixed and spent adjust automatically —
           investment targets stay the same.
         </p>
         <div className="flex items-center justify-center py-2">
@@ -242,6 +285,13 @@ export default function Dashboard({
           Save in-hand 💾
         </Ripple>
       </BottomSheet>
+
+      <PinPrompt
+        open={askInHandPin}
+        onClose={() => setAskInHandPin(false)}
+        onSuccess={() => setInHandRevealed(true)}
+        message="to view your in-hand salary"
+      />
     </div>
   )
 }
