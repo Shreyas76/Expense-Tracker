@@ -30,7 +30,7 @@ function SummaryCard({ label, value, color, accent, onClick, editable }) {
   )
 }
 
-function TransactionRow({ tx, sourceLabel }) {
+function TransactionRow({ tx, sourceLabel, banks, cards }) {
   if (tx.kind === 'investment') {
     return (
       <div className="flex items-center gap-3 py-2.5">
@@ -51,14 +51,22 @@ function TransactionRow({ tx, sourceLabel }) {
     )
   }
   if (tx.kind === 'payment') {
+    const bank = banks?.find((b) => b.id === tx.bankId)?.label
+    const card = cards?.find((c) => c.id === tx.cardId)?.name
     return (
       <div className="flex items-center gap-3 py-2.5">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success/15 text-lg">
           💸
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-white">Card bill paid</p>
-          <p className="text-xs text-muted">{formatTimestamp(tx.ts)}</p>
+          <p className="truncate text-sm font-medium text-white">
+            Card bill paid{card ? ` · ${card}` : ''}
+          </p>
+          <p className="text-xs text-muted">
+            {formatTimestamp(tx.ts)}
+            {bank ? ` · from ${bank}` : ''}
+            {' · not an expense'}
+          </p>
         </div>
         <span className="text-sm font-semibold text-success">{formatINR(tx.amount)}</span>
       </div>
@@ -103,6 +111,7 @@ export default function Dashboard({
     phase,
     banks,
     totalBank,
+    cards,
     cardProgress,
     totalOutstanding,
     sourceLabel
@@ -198,7 +207,13 @@ export default function Dashboard({
         ) : (
           <div className="divide-y divide-white/5">
             {recent.map((tx) => (
-              <TransactionRow key={tx.id} tx={tx} sourceLabel={sourceLabel} />
+              <TransactionRow
+                key={tx.id}
+                tx={tx}
+                sourceLabel={sourceLabel}
+                banks={banks}
+                cards={cards}
+              />
             ))}
           </div>
         )}

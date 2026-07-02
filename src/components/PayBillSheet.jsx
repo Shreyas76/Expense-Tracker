@@ -31,7 +31,13 @@ export default function PayBillSheet({ open, onClose, cards, banks, presetCardId
 
   return (
     <BottomSheet open={open} onClose={onClose} title="Pay card bill">
-      <p className="mb-3 text-sm text-muted">Move money from a bank to clear a card's outstanding.</p>
+      <p className="mb-1 text-sm text-muted">
+        Clear what you already owe on a card. This is <span className="font-semibold text-white">not</span> a
+        new expense — those were logged when you spent on the card.
+      </p>
+      <p className="mb-3 text-xs text-muted">
+        Money moves from your bank to the card. Your bank balance goes down; card outstanding goes down.
+      </p>
 
       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted">Card</p>
       <div className="mb-3 flex flex-wrap gap-2">
@@ -51,7 +57,8 @@ export default function PayBillSheet({ open, onClose, cards, banks, presetCardId
         ))}
       </div>
 
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted">Pay from</p>
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted">Pay from bank</p>
+      <p className="mb-2 text-[11px] text-muted">Choose which account the payment leaves.</p>
       <div className="mb-3 flex flex-wrap gap-2">
         {banks.map((b) => (
           <button

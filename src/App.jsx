@@ -194,7 +194,7 @@ export default function App() {
   const submitPayBill = (payload) => {
     const entry = model.payCardBill(payload)
     setPayBill(null)
-    showSnack('Bill paid 💸', {
+    showSnack('Bill paid — bank updated, not counted as expense 💸', {
       actionLabel: 'Undo',
       duration: 5000,
       onUndo: () => model.deletePaymentAt(monthKey, entry.id)

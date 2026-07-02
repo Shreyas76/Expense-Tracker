@@ -1,13 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0f1117"/>
-  <rect x="96" y="150" width="320" height="230" rx="40" fill="#6366f1"/>
-  <rect x="96" y="150" width="320" height="230" rx="40" fill="url(#g)"/>
-  <circle cx="332" cy="265" r="26" fill="#0f1117" opacity="0.35"/>
-  <text x="200" y="312" font-family="Inter, Arial, sans-serif" font-size="150" font-weight="800" fill="#ffffff" text-anchor="middle">¹</text>
   <defs>
-    <linearGradient id="g" x1="96" y1="150" x2="416" y2="380" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#151822"/>
+      <stop offset="1" stop-color="#0a0c12"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="256" y1="120" x2="256" y2="392" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366f1" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="invest" x1="180" y1="180" x2="340" y2="340" gradientUnits="userSpaceOnUse">
       <stop stop-color="#818cf8"/>
       <stop offset="1" stop-color="#4f46e5"/>
     </linearGradient>
   </defs>
+
+  <!-- App tile -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="96" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+
+  <!-- Soft glow behind the chart -->
+  <ellipse cx="256" cy="268" rx="168" ry="168" fill="url(#glow)"/>
+
+  <!-- Donut segments (fixed · spent · invested) -->
+  <g transform="translate(256 268) rotate(-90)">
+    <circle r="132" fill="none" stroke="#6366f1" stroke-width="52" stroke-linecap="round"
+      stroke-dasharray="290 540" stroke-dashoffset="0"/>
+    <circle r="132" fill="none" stroke="#ef4444" stroke-width="52" stroke-linecap="round"
+      stroke-dasharray="165 540" stroke-dashoffset="-305"/>
+    <circle r="132" fill="none" stroke="#f59e0b" stroke-width="52" stroke-linecap="round"
+      stroke-dasharray="72 540" stroke-dashoffset="-485"/>
+  </g>
+
+  <!-- Inner hub -->
+  <circle cx="256" cy="268" r="78" fill="#1a1d27"/>
+  <circle cx="256" cy="268" r="78" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="2"/>
+
+  <!-- Rupee mark -->
+  <text x="256" y="298" font-family="Arial, Helvetica, sans-serif" font-size="108" font-weight="800"
+    fill="#ffffff" text-anchor="middle">?</text>
+
+  <!-- Growth tick (investment accent) -->
+  <path d="M372 148 L402 118 L432 148 L417 148 L417 178 L387 178 L387 148 Z" fill="#10b981" opacity="0.95"/>
+  <path d="M378 154 L402 130 L426 154" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
 </svg>

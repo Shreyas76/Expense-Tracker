@@ -29,6 +29,9 @@ export default function CardsSection({ cardProgress, totalOutstanding, onPayBill
           Pay bill
         </Ripple>
       </div>
+      <p className="mb-3 text-[11px] text-muted">
+        Paying a bill is not counted as a new expense — it only moves money from your bank to the card.
+      </p>
 
       <div className="space-y-3">
         {cardProgress.map((c, i) => (
